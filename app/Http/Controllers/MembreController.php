@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Membre;
+
+
+
 class MembreController extends Controller
 {
     /**
@@ -12,6 +16,8 @@ class MembreController extends Controller
     public function index()
     {
         //
+        $membres = Membre::all();
+        return view('membres.index', compact('membres'));
     }
 
     /**
@@ -20,6 +26,7 @@ class MembreController extends Controller
     public function create()
     {
         //
+        return view('membres.create');
     }
 
     /**
@@ -27,8 +34,23 @@ class MembreController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+        'nom' => 'required',
+        'prenom' => 'required',
+        'email' => 'required|email|unique:membres,email',
+        'telephone' => 'nullable'
+        ]);
+        
+        Membre::create([
+            'nom' => $request->nom,
+            'prenom' => $request->prenom,
+            'telephone' => $request->telephone,
+            'email' => $request->email
+        ]);
+
+        return redirect('/membres');
     }
+
 
     /**
      * Display the specified resource.
