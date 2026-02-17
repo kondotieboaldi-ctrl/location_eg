@@ -13,9 +13,19 @@
     @foreach($membres as $membre)
         <li>
             {{ $membre->nom }} {{ $membre->prenom }} - {{ $membre->email }}
+            
+            <a href="/membres/{{ $membre->id }}/edit">Modifier</a>
+            
+            <form action="/membres/{{ $membre->id }}" method="POST" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit">Supprimer</button>
+            </form>
+
         </li>
     @endforeach
 </ul>
+
 
 </body>
 </html>

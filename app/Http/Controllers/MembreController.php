@@ -66,6 +66,9 @@ class MembreController extends Controller
     public function edit(string $id)
     {
         //
+        $membre = Membre::findOrFail($id);
+
+        return view('membres.edit', compact('membre'));
     }
 
     /**
@@ -74,13 +77,35 @@ class MembreController extends Controller
     public function update(Request $request, string $id)
     {
         //
+         $request->validate([
+            'nom' => 'required',
+            'prenom' => 'required',
+            'email' => 'required|email|unique:membres,email,' . $id,
+        ]);
+        
+        $membre = Membre::findOrFail($id);
+        
+        $membre->update([
+            'nom' => $request->nom,
+            'prenom' => $request->prenom,
+            'telephone' => $request->telephone,
+            'email' => $request->email
+        ]);
+        
+        return redirect('/membres');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+   
+    public function destroy($id)
     {
         //
+        $membre = Membre::findOrFail($id);
+        $membre->delete();
+
+        return redirect('/membres');
     }
+
 }
