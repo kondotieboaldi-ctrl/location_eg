@@ -15,8 +15,13 @@ class MembreController extends Controller
      */
     public function index()
     {
-        //
-        $membres = Membre::all();
+        //Afficher tous les membres
+        // $membres = Membre::all();
+
+
+        // Afficher uniquement les membres actifs
+        $membres = Membre::where('actif', true)->get(); 
+
         return view('membres.index', compact('membres'));
     }
 
@@ -107,5 +112,36 @@ class MembreController extends Controller
 
         return redirect('/membres');
     }
+
+
+    /**
+     * Permet de desactiver un membre.
+     */
+    public function desactiver($id)
+    {
+
+        $membre = Membre::findOrFail($id);
+        $membre->actif = false;
+        $membre->save();
+
+        return redirect('/membres')->with('success', 'Membre désactivé');
+    }
+
+
+
+     /**
+     * Permet de reactiver un membre.
+     */
+    public function activer($id)
+    {
+
+        $membre = Membre::findOrFail($id);
+        $membre->actif = true;
+        $membre->save();
+
+        return redirect()->back()->with('success', 'Membre réactivé');
+    }
+
+
 
 }
